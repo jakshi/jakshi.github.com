@@ -3,7 +3,6 @@ layout: post
 title: "Winter in Thailand or from idea to reality: Part I - Why Thailand?"
 date: 2012-11-20 22:09
 comments: true
-published: false
 categories:
   - thailand
   - non-technical

@@ -20,7 +20,7 @@ It works extremely slow with some WiFi AP.
 
 # How to fix
 After some investigation I clarify that you need to switch off 802.11n for Centrino Wireless-B 1030 BGN WiFi adapter, then adapter will work good with all AP.
-I think that some of AP realize 802.11n protocol in not correct way, that confuses Centrio WiFi adapter.
+I think that some of AP realize 802.11n protocol in not correct way, And this confuses Centrino WiFi adapter.
 
 ## Switch off 802.11n
 

@@ -5,6 +5,7 @@ date: 2012-11-20 22:09
 comments: true
 categories:
   - thailand
+  - koh  samui
   - non-technical
   - remote work
 ---
@@ -25,7 +26,7 @@ Also different places of world have different features, may be you'll like some 
 
 I like weather to be warm. I like sea, fruits and learning foreign languages. Also I'm a remote worker, so I need fair internet connection.
 
-As winter begin to come - I thought, may be it'd be great to move to some warm place? I'm not rich DevOp from Ukraine so this place should have not very big prices.
+As winter begin to come - I thought, may be it'd be great to move to some warm place? I'm not rich DevOp from Ukraine so this place should have prices comparable with Ukraine ones.
 
 So after some comparision and reading different sources I choose Thailand. How it looks from internet?
 
@@ -46,4 +47,69 @@ Cons:
 
 Running ahead, I should tell that all these stuff appear to be true, when I've come to Thailand.
 
-It looks good for me - so I choose Thailand, that lead me to next step - I needed to buy airtickets to Thailand.
+It looks good for me - so I choose Thailand, that lead me to next step:
+
+# Thailand is big, where to go?
+We need:
+
+* sea around
+* some infrastructure (water, electricity, internet and so on)
+* it would be great if place wasn't noisy - so we could work without disturbances.  
+* not very expensive to live
+
+Candidates:
+
+After some investigation about Thailand I choose several places to go.
+
+## Koh Samui
+
+* pros:
+    * good beaches
+    * serene place
+    * it's romantic to live on the tropical island
+* cons:
+    * small island, so not so much infrastructure (supermarkets are still here though)
+    * more expensive than (for example) Bangkok
+    * on some parts of island internet is not very good
+
+## Hua Hin:
+
+* pros:
+    * internet is better than on islands.
+    * prices are decent.
+    * good beaches.
+* cons:
+
+## Phuket:
+
+* pros:
+    * medium island with bridge to continent, easy to go somewhere
+    * You'll still live on tropical island
+    * relatively good internet
+* cons:
+    * more expensive than Samui (which's not very cheap!)
+
+## Krabi
+* pros:
+    * good beaches
+    * there're good climbing sites (I like climbing)
+    * good for snorkeling (I like snorkeling too)
+* cons:
+    * more expensive than Samui (which's not very cheap!)
+    * internet isn't very good there
+
+## Pattaya
+  * pros:
+    * good infrastructure (internet, super markets and so on)
+  * cons:
+    * noisy and messy place, a lot of night life
+    * it's expensive to live there
+
+After some thoughts I decided to go to Koh Samui, I like serene places, and it's not too expensive to live there. May be I'll try Hua Hin next year.
+
+So now I know where to go, that lead me to the next step - I needed to buy air tickets to Thailand.
+
+# Further reading
+  * [List of cities in Thailand](http://en.wikipedia.org/wiki/List_of_cities_in_Thailand)
+  * [Big forum about Thailand](http://www.thaivisa.com/forum/)
+  * [Section of Big forum about Thailand, Koh Samui island](http://www.thaivisa.com/forum/forum/30-koh-samui-koh-phangan-koh-tao/)

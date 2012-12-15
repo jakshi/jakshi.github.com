@@ -5,7 +5,7 @@ date: 2012-11-20 22:09
 comments: true
 categories:
   - thailand
-  - koh  samui
+  - koh samui
   - non-technical
   - remote work
 ---

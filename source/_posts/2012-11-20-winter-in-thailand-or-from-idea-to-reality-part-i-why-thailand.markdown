@@ -22,6 +22,8 @@ When you are on usual holiday you hardly learn a lot about foreign country durin
 
 Also different places of world have different features, may be you'll like some of them.
 
+<!-- more -->
+
 # Why Thailand?
 
 I like weather to be warm. I like sea, fruits and learning foreign languages. Also I'm a remote worker, so I need fair internet connection.
@@ -107,7 +109,7 @@ After some investigation about Thailand I choose several places to go.
 
 After some thoughts I decided to go to Koh Samui, I like serene places, and it's not too expensive to live there. May be I'll try Hua Hin next year.
 
-So now I know where to go, that lead me to the next step - I needed to buy air tickets to Thailand.
+So now I know where to go, that lead me to the next step - [I needed to buy air tickets to Thailand.](/blog/2012/12/15/winter-in-thailand-or-from-idea-to-reality-part-ii-air-tickets/)
 
 # Further reading
   * [List of cities in Thailand](http://en.wikipedia.org/wiki/List_of_cities_in_Thailand)

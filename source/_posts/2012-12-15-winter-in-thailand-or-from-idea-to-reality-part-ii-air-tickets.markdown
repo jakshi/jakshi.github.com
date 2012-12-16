@@ -17,13 +17,15 @@ published: true
 
 So we need to buy air tickets to Thailand. After some thoughts we decide to buy air tickets to Bagkok, spent there several days, and then move to Ko Samui.
 
+<!-- more -->
+
 # Where to find cheapest ones?
 
 I doubt that I'll say something new, but earlier you buy tickets - the cheaper they will get.
 Because:
 
   * most cheap tickets end up first.
-  * most companies give you discount if they bought tickets in advance.
+  * most companies give you discount if you buy tickets in advance.
 
 We use [KAYAK](https://www.kayak.com/) to search for cheapest tickets. We bought tickets not early, so they cost us a lot - 900$ per person from Ukraine to Thailand and back.
 

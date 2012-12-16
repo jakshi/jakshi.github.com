@@ -17,6 +17,7 @@ categories:
 I've bumped into issue with Intel Centrino Wireless-N 1030 BGN WiFi adapter under Ubuntu Linux 12.04 LTS.
 It works extremely slow with some WiFi AP.
 
+<!-- more -->
 
 # How to fix
 After some investigation I clarify that you need to switch off 802.11n for Centrino Wireless-B 1030 BGN WiFi adapter, then adapter will work good with all AP.

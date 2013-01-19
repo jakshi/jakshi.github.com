@@ -15,7 +15,7 @@ categories:
 
 I have air tickets to Thailand now, but that's not all. Now I need visa to Thailand. 
 
-I will tell about visas for Ukrainian citizens.
+I will tell about getting visa to Thailand for Ukrainian citizens.
 
 <!-- more -->
 

@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Winter in Thailand or from idea to reality: Part III - Visas"
-date: 2012-01-19 23:31
+date: 2013-01-19 23:31
 comments: true
 published: true
 categories:

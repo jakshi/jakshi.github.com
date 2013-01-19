@@ -58,7 +58,7 @@ I especially don't like the last point.
 
 I booked tickets that [KAYAK](https://www.kayak.com/) cannot book for me on site of air company that make flight - it was [Bangkok Airways](http://www.bangkokair.com/eng), there wasn't any problems.
 
-So I got the air tickets, and now [I needed to get visa to Thailand.](/blog/2012/01/19/winter-in-thailand-or-from-idea-to-reality-part-iii-visas/) 
+So I got the air tickets, and now [I needed to get visa to Thailand.](/blog/2013/01/19/winter-in-thailand-or-from-idea-to-reality-part-iii-visas/) 
 
 # Further reading
 

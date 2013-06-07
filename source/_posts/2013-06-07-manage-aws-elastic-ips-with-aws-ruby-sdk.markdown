@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "manage_AWS_Elastic_IPs_with_aws-ruby-sdk"
+title: "Manage AWS Elastic IPs with AWS Ruby SDK"
 date: 2013-06-07 13:48
 comments: true
 categories: 

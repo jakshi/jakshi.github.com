@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Resolving 'nf_conntrack: table full"
+title: "Resolving `nf_conntrack: table full, dropping packet` messages"
 date: 2013-06-16 13:55
 comments: true
 categories: 

@@ -8,6 +8,7 @@ categories:
 - system administration
 - sysctl
 - network
+- quick note
 ---
 
 Just a quick note:

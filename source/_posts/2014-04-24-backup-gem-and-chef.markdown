@@ -195,25 +195,25 @@ Action part of recipe. It will configure backup.
 * I presume that you use chef-server and you already have some chef repository, like `example-chef-repo`.
 * Fill aws data bag with credentials
 
-        mkdir -p example-chef-repo/data_bags/aws
-        emacs example-chef-repo/data_bags/aws/backup.json
+`mkdir -p example-chef-repo/data_bags/aws`
+`emacs example-chef-repo/data_bags/aws/backup.json`
 
-        {
-          "id": "backup",
-          "aws_access_key_id": "AWS_ACCESS_KEY",
-          "aws_secret_access_key": "AWS_SECRET_KEY"
-        }
+    {
+      "id": "backup",
+      "aws_access_key_id": "AWS_ACCESS_KEY",
+      "aws_secret_access_key": "AWS_SECRET_KEY"
+    }
 
 * It's better to use AWS_ACCESS_KEY and AWS_SECRET_KEY credentials of IAM user that has access to S3 only.
 * Upload that data bag to your chef-server
 
-        knife data bag create aws
-        knife data bag from file aws backup.json
+`knife data bag create aws`
+`knife data bag from file aws backup.json`
 
 * If you don't have chef-server, rewrite recipe to use attributes, and set AWS credentials through attributes.
 * And That's it - just add example-backup to your node run_list.
 
-        knife node run_list add node_name 'recipe[example-backup]'
+`knife node run_list add node_name 'recipe[example-backup]'`
 
 * And run `chef-client` on the node.
 

@@ -62,6 +62,8 @@ emacs emacs test/fixtures/cookbooks/test-helper/recipes/default.rb
 ```
 
 ```
+chef_gem 'activesupport'
+
 require 'pathname'
 require 'active_support/core_ext/hash/deep_merge'
 

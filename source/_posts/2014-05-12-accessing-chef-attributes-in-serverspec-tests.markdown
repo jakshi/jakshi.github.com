@@ -3,7 +3,11 @@ layout: post
 title: "Accessing chef attributes in serverspec tests"
 date: 2014-05-12 01:45
 comments: true
-categories: 
+categories:
+  - chef
+  - technical
+  - serverspec
+  - devops
 ---
 
 I presume that you are familiar with:
@@ -58,7 +62,7 @@ end
 ```
 
 ```
-emacs emacs test/fixtures/cookbooks/test-helper/recipes/default.rb
+emacs test/fixtures/cookbooks/test-helper/recipes/default.rb
 ```
 
 ```
@@ -96,6 +100,10 @@ ruby_block "dump_node_attributes" do
     File.open('/tmp/serverspec/node.json', 'w') { |file| file.write(JSON.pretty_generate(attrs)) }
   end
 end
+```
+
+```
+echo "This a cookbook for dumping chef node attributes to specific location to json formated file." > test/fixtures/cookbooks/test-helper/README.md
 ```
 
 ## Add it to .kitchen.yml
@@ -159,14 +167,7 @@ require 'net/http'
 require 'net/smtp'
 require 'json'
 
-include Serverspec::Helper::Exec
-include Serverspec::Helper::DetectOS
-
-RSpec.configure do |c|
-  c.before :all do
-    c.os = backend(Serverspec::Commands::Base).check_os
-  end
-end
+set :backend, :exec
 
 $node = ::JSON.parse(File.read('/tmp/serverspec/node.json'))
 ```

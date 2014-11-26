@@ -47,4 +47,14 @@ knife exec -E 'nodes.transform ("chef_environment:qa02") {|n| puts n.run_list.re
 knife ssh 'chef_environment:qa02' 'sudo chef-client'
 ```
 
-Want even more shortcuts? Read nice article: [Knife Tricks](http://dougireton.com/blog/2013/02/03/knife-tricks/)
+# Search for nodes in specific environment and having specific recipe
+And show only node names (-i option)
+
+
+```
+knife search node "chef_environment:production AND recipes:web_server" -i
+```
+
+# More shotcuts
+
+Do you want even more shortcuts? Read nice article: [Knife Tricks](http://dougireton.com/blog/2013/02/03/knife-tricks/)

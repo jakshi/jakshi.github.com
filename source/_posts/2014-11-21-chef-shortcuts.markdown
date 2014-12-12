@@ -10,7 +10,7 @@ categories:
   - devops
 ---
 
-# Add a recipe to run list on certain environment
+# Add a recipe to the end of run list on certain environment
 
 Test run, not actually add a recipe:
 
@@ -26,6 +26,19 @@ knife exec -E 'nodes.transform ("chef_environment:beta") {|n| puts n.run_list <<
 
 <!-- more -->
 
+# Add a recipe to the beginning of run list on certain environment
+
+Test run, not actually add a recipe:
+
+```
+knife exec -E 'nodes.transform ("chef_environment:qa01") {|n| old_rl = n.run_list.to_a; puts n.run_list(["recipe[datadog::dd-handler]"] + old_rl) }'
+```
+
+Add a recipe for real:
+
+```
+knife exec -E 'nodes.transform ("chef_environment:qa01") {|n| old_rl = n.run_list.to_a; puts n.run_list(["recipe[datadog::dd-handler]"] + old_rl); n.save }'
+```
 
 # Remove a recipe from run list on certain environment
 

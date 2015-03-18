@@ -40,6 +40,20 @@ Add a recipe for real:
 knife exec -E 'nodes.transform ("chef_environment:qa01") {|n| old_rl = n.run_list.to_a; puts n.run_list(["recipe[datadog::dd-handler]"] + old_rl); n.save }'
 ```
 
+# Insert a recipe in the second position of run list on certain environment
+
+Test run, not actually add a recipe:
+
+```
+knife exec -E 'nodes.transform ("chef_environment:qa04") {|n| old_rl = n.run_list.to_a; puts n.run_list(old_rl[0..0] + ["recipe[datadog::dd-handler]"] + old_rl[1..-1]) }'
+```
+
+Add a recipe for real:
+
+```
+knife exec -E 'nodes.transform ("chef_environment:qa04") {|n| old_rl = n.run_list.to_a; puts n.run_list(old_rl[0..0] + ["recipe[datadog::dd-handler]"] + old_rl[1..-1]); n.save }'
+```
+
 # Remove a recipe from run list on certain environment
 
 Test run, not actually remove a recipe:

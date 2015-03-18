@@ -1,0 +1,447 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Manage AWS Elastic IPs with fog - DevOp's Blog</title>
+  <meta name="author" content="jakshi">
+
+  
+  <meta name="description" content="Connect to AWS API with fog. require 'fog' c = Fog::Compute.new( :provider =&gt; 'AWS', :aws_access_key_id =&gt; 'Your AWS access key', : &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://jakshi.github.com/blog/2013/06/03/manage-aws-elastic-ips-with-fog/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="DevOp's Blog" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-15926665-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">DevOp's Blog</a></h1>
+  
+    <h2>jakshi's devop blog.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:jakshi.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/about">About me</a></li>
+  <li><a href="http://wiki.jakshi.com">Wiki</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Manage AWS Elastic IPs With Fog</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-03T19:25:00+08:00" pubdate data-updated="true">Jun 3<span>rd</span>, 2013</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><h1>Connect to AWS API with fog.</h1>
+
+<pre><code>require 'fog'
+
+c = Fog::Compute.new(
+                 :provider =&gt; 'AWS',
+                 :aws_access_key_id =&gt; 'Your AWS access key',
+                 :aws_secret_access_key =&gt; 'Your AWS secret key',
+                 :region =&gt; 'us-east-1' )
+</code></pre>
+
+<!-- more -->
+
+
+<h1>Associate Elastic IP</h1>
+
+<pre><code>eip = c.addresses.get('Your elastic IP address')
+c.associate_address("Your instance id",nil,nil,eip.allocation_id)
+</code></pre>
+
+<h1>Disassociate Elastic IP</h1>
+
+<pre><code>eip = c.describe_addresses('public-ip' =&gt; ['Your elastic IP address'])
+disassociate_address(nil,eip[:body]["addressesSet"][0]["associationId"])
+</code></pre>
+
+<h1>Association Elastic IP script example.</h1>
+
+<p><strong>assign_eip.rb</strong>:</p>
+
+<pre><code>#!/usr/bin/ruby
+# This is a script that assign Elastic IP to current instance.
+# Usage:
+# You need to fill out config_eip.json config file:
+# {
+# "aws_access_key": "aws_access_key",
+# "aws_secret_key": "aws_secret_key",
+# "eip": "x.x.x.x",
+# }
+#
+# Config file should be in the same dir as a script
+# then, start script:
+# assign_eip.rb
+# This will assign x.x.x.x Elastic IP to current instance.
+
+require "rubygems"
+require "json"
+require "net/http"
+require "fog"
+
+# Read config
+CONFIG = JSON.parse(IO.read(File.join(File.dirname(__FILE__), 'assign_eip.json')))
+
+# Here we need to get server.id
+INSTANCE_HOST = '169.254.169.254'
+INSTANCE_ID_URL = '/latest/meta-data/instance-id'
+INSTANCE_REGION_URL = '/latest/meta-data/placement/availability-zone'
+
+httpcall = Net::HTTP.new(INSTANCE_HOST)
+resp, instance_id = httpcall.get2(INSTANCE_ID_URL)
+resp, region = httpcall.get2(INSTANCE_REGION_URL)
+
+# Cut out availability zone marker.
+# For example if region == "us-east-1c" after cutting out it will be
+# "us-east-1"
+
+region = region[0..-2]
+
+# First we get a connection object from amazon, region is
+# required if your instances are in other zone than the
+# gem's default one (us-east-1).
+
+c = Fog::Compute.new(
+                 :provider =&gt; 'AWS',
+                 :aws_access_key_id =&gt; CONFIG['aws_access_key'],
+                 :aws_secret_access_key =&gt; CONFIG['aws_secret_key'],
+                 :region =&gt; region )
+
+# Then we get Fog::Compute::AWS::Address to get allocation_id of Elastic IP.
+# For some reason I failed to make it work with IP address directly.
+# if I use Elastic IP instead of allocation id it always returns 400
+# Bad Request.
+
+eip = c.addresses.get(CONFIG['eip'])
+
+# Then we accociate Elastic IP with current node.
+
+c.associate_address(instance_id,nil,nil,eip.allocation_id)
+</code></pre>
+
+<p><strong>assign_eip.json</strong>:</p>
+
+<pre><code>{
+"aws_access_key": "AWS_access_key",
+"aws_secret_key": "Your_AWS_secret_key",
+"eip": "Elastic IP to assign"
+}
+</code></pre>
+
+<h1>Further reading</h1>
+
+<ul>
+<li><a href="http://rubydoc.info/gems/fog/frames">RubyDoc: fog</a></li>
+<li><a href="http://rubydoc.info/github/fog/fog/Fog/Compute/AWS">RubyDoc: Fog::Compute::AWS</a></li>
+<li><a href="http://rubydoc.info/github/stesla/fog/Fog/AWS/EC2#associate_address-instance_method">RubyDoc: Fog::AWS::EC2.associate_address</a></li>
+<li><a href="http://rubydoc.info/github/fog/fog/Fog/Compute/AWS/Addresses">RubyDoc: Fog::Compute::AWS::Addresses</a></li>
+<li><a href="http://rubydoc.info/github/fog/fog/index">RubyDoc: Fog Alphabetic Index</a></li>
+<li><a href="https://github.com/fog/fog/blob/master/lib/fog/aws/requests/compute/associate_address.rb">GitHub: fog - associate_address.rb</a></li>
+<li><a href="http://opsrobot.com/post/9631423001/using-fog-for-attaching-aws-elastic-ip-addresses-to">Using fog for attaching AWS elastic ip addresses to servers</a></li>
+<li><a href="http://fog.io/">Fog home site</a></li>
+<li><a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AESDG-chapter-instancedata.html">AWS Documentation: Instance Metadata and User Data</a></li>
+<li><a href="https://github.com/madebymade/aws-remap-elastic-ip">AWS Elastic IP remapper</a></li>
+</ul>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">jakshi</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2013-06-03T19:25:00+08:00" pubdate data-updated="true">Jun 3<span>rd</span>, 2013</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/amazon/'>amazon</a>, <a class='category' href='/blog/categories/aws/'>aws</a>, <a class='category' href='/blog/categories/fog/'>fog</a>, <a class='category' href='/blog/categories/ruby/'>ruby</a>, <a class='category' href='/blog/categories/technical/'>technical</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://jakshi.github.com/blog/2013/06/03/manage-aws-elastic-ips-with-fog/" data-via="" data-counturl="http://jakshi.github.com/blog/2013/06/03/manage-aws-elastic-ips-with-fog/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2013/01/19/winter-in-thailand-or-from-idea-to-reality-part-iii-visas/" title="Previous Post: Winter in Thailand or from idea to reality: Part III - Visas">&laquo; Winter in Thailand or from idea to reality: Part III - Visas</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2013/06/07/manage-aws-elastic-ips-with-aws-ruby-sdk/" title="Next Post: Manage AWS Elastic IPs with AWS Ruby SDK">Manage AWS Elastic IPs with AWS Ruby SDK &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    
+<section>
+	<span>
+		<img src="http://www.gravatar.com/avatar/09d9230b93dcba238e0a7ff787676cca" alt="Gravatar of jakshi " title="Gravatar of jakshi" />
+	</span>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2015/01/01/2014-year-sum-up/">2014 year sum up</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/11/21/chef-shortcuts/">Chef shortcuts</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/07/14/rewriting-git-commit/">Rewriting git commit</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/05/12/accessing-chef-attributes-in-serverspec-tests/">Accessing chef attributes in serverspec tests</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2014/05/03/chef-cookbook-templating-with-cookiecutter/">Chef cookbook templating with cookiecutter</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/jakshi">@jakshi</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'jakshi',
+            count: 3,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+<section class="googleplus">
+  <h1>
+    <a href="https://plus.google.com/102283293607093553959?rel=author">
+      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
+      Google+
+    </a>
+  </h1>
+</section>
+
+
+
+<section>
+<script async
+        src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- jakshi.com_sidebar -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:300px;height:250px"
+     data-ad-client="ca-pub-3625827598351192"
+     data-ad-slot="1696877219"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</section>
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2015 - jakshi -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'devopblog';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://jakshi.github.com/blog/2013/06/03/manage-aws-elastic-ips-with-fog/';
+        var disqus_url = 'http://jakshi.github.com/blog/2013/06/03/manage-aws-elastic-ips-with-fog/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) {return;}
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

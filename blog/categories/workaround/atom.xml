@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: workaround | DevOp's Blog]]></title>
+  <link href="http://jakshi.github.com/blog/categories/workaround/atom.xml" rel="self"/>
+  <link href="http://jakshi.github.com/"/>
+  <updated>2015-03-18T19:51:54+08:00</updated>
+  <id>http://jakshi.github.com/</id>
+  <author>
+    <name><![CDATA[jakshi]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Resolving slow wifi issue with Centrino N 1030 BGN in Ubuntu 12.04 LTS]]></title>
+    <link href="http://jakshi.github.com/blog/2012/11/26/resolving-slow-wifi-issue-with-centrino-n-1030-bgn-in-ubuntu-12-dot-04-lts/"/>
+    <updated>2012-11-26T12:03:00+08:00</updated>
+    <id>http://jakshi.github.com/blog/2012/11/26/resolving-slow-wifi-issue-with-centrino-n-1030-bgn-in-ubuntu-12-dot-04-lts</id>
+    <content type="html"><![CDATA[<h1>Introduction</h1>
+
+<p>I've bumped into issue with Intel Centrino Wireless-N 1030 BGN WiFi adapter under Ubuntu Linux 12.04 LTS.
+It works extremely slow with some WiFi AP.</p>
+
+<!-- more -->
+
+
+<h1>How to fix</h1>
+
+<p>After some investigation I clarify that you need to switch off 802.11n for Centrino Wireless-B 1030 BGN WiFi adapter, then adapter will work good with all AP.
+I think that some of AP realize 802.11n protocol in not correct way, And this confuses Centrino WiFi adapter.</p>
+
+<h2>Switch off 802.11n</h2>
+
+<pre><code>sudo rmmod iwlwifi
+sudo modprobe iwlwifi 11n_disable=1
+</code></pre>
+
+<h2>Switch on 802.11n</h2>
+
+<pre><code>sudo rmmod iwlwifi
+sudo modprobe iwlwifi 11n_disable=0
+</code></pre>
+
+<h2>Permanently switch off 802.11n</h2>
+
+<pre><code>emacs /etc/modprobe.d/iwlwifi-disable11n.conf
+options iwlwifi 11n_disable=1
+</code></pre>
+
+<h1>Further reading</h1>
+
+<ul>
+<li><a href="http://askubuntu.com/questions/130499/how-do-i-fix-slow-wireless-on-intel-wireless-cards">How do I fix slow wireless on Intel wireless cards?</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+</feed>

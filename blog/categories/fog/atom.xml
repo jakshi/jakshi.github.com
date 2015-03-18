@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: fog | DevOp's Blog]]></title>
+  <link href="http://jakshi.github.com/blog/categories/fog/atom.xml" rel="self"/>
+  <link href="http://jakshi.github.com/"/>
+  <updated>2015-03-18T19:51:54+08:00</updated>
+  <id>http://jakshi.github.com/</id>
+  <author>
+    <name><![CDATA[jakshi]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Manage AWS Elastic IPs with fog]]></title>
+    <link href="http://jakshi.github.com/blog/2013/06/03/manage-aws-elastic-ips-with-fog/"/>
+    <updated>2013-06-03T19:25:00+08:00</updated>
+    <id>http://jakshi.github.com/blog/2013/06/03/manage-aws-elastic-ips-with-fog</id>
+    <content type="html"><![CDATA[<h1>Connect to AWS API with fog.</h1>
+
+<pre><code>require 'fog'
+
+c = Fog::Compute.new(
+                 :provider =&gt; 'AWS',
+                 :aws_access_key_id =&gt; 'Your AWS access key',
+                 :aws_secret_access_key =&gt; 'Your AWS secret key',
+                 :region =&gt; 'us-east-1' )
+</code></pre>
+
+<!-- more -->
+
+
+<h1>Associate Elastic IP</h1>
+
+<pre><code>eip = c.addresses.get('Your elastic IP address')
+c.associate_address("Your instance id",nil,nil,eip.allocation_id)
+</code></pre>
+
+<h1>Disassociate Elastic IP</h1>
+
+<pre><code>eip = c.describe_addresses('public-ip' =&gt; ['Your elastic IP address'])
+disassociate_address(nil,eip[:body]["addressesSet"][0]["associationId"])
+</code></pre>
+
+<h1>Association Elastic IP script example.</h1>
+
+<p><strong>assign_eip.rb</strong>:</p>
+
+<pre><code>#!/usr/bin/ruby
+# This is a script that assign Elastic IP to current instance.
+# Usage:
+# You need to fill out config_eip.json config file:
+# {
+# "aws_access_key": "aws_access_key",
+# "aws_secret_key": "aws_secret_key",
+# "eip": "x.x.x.x",
+# }
+#
+# Config file should be in the same dir as a script
+# then, start script:
+# assign_eip.rb
+# This will assign x.x.x.x Elastic IP to current instance.
+
+require "rubygems"
+require "json"
+require "net/http"
+require "fog"
+
+# Read config
+CONFIG = JSON.parse(IO.read(File.join(File.dirname(__FILE__), 'assign_eip.json')))
+
+# Here we need to get server.id
+INSTANCE_HOST = '169.254.169.254'
+INSTANCE_ID_URL = '/latest/meta-data/instance-id'
+INSTANCE_REGION_URL = '/latest/meta-data/placement/availability-zone'
+
+httpcall = Net::HTTP.new(INSTANCE_HOST)
+resp, instance_id = httpcall.get2(INSTANCE_ID_URL)
+resp, region = httpcall.get2(INSTANCE_REGION_URL)
+
+# Cut out availability zone marker.
+# For example if region == "us-east-1c" after cutting out it will be
+# "us-east-1"
+
+region = region[0..-2]
+
+# First we get a connection object from amazon, region is
+# required if your instances are in other zone than the
+# gem's default one (us-east-1).
+
+c = Fog::Compute.new(
+                 :provider =&gt; 'AWS',
+                 :aws_access_key_id =&gt; CONFIG['aws_access_key'],
+                 :aws_secret_access_key =&gt; CONFIG['aws_secret_key'],
+                 :region =&gt; region )
+
+# Then we get Fog::Compute::AWS::Address to get allocation_id of Elastic IP.
+# For some reason I failed to make it work with IP address directly.
+# if I use Elastic IP instead of allocation id it always returns 400
+# Bad Request.
+
+eip = c.addresses.get(CONFIG['eip'])
+
+# Then we accociate Elastic IP with current node.
+
+c.associate_address(instance_id,nil,nil,eip.allocation_id)
+</code></pre>
+
+<p><strong>assign_eip.json</strong>:</p>
+
+<pre><code>{
+"aws_access_key": "AWS_access_key",
+"aws_secret_key": "Your_AWS_secret_key",
+"eip": "Elastic IP to assign"
+}
+</code></pre>
+
+<h1>Further reading</h1>
+
+<ul>
+<li><a href="http://rubydoc.info/gems/fog/frames">RubyDoc: fog</a></li>
+<li><a href="http://rubydoc.info/github/fog/fog/Fog/Compute/AWS">RubyDoc: Fog::Compute::AWS</a></li>
+<li><a href="http://rubydoc.info/github/stesla/fog/Fog/AWS/EC2#associate_address-instance_method">RubyDoc: Fog::AWS::EC2.associate_address</a></li>
+<li><a href="http://rubydoc.info/github/fog/fog/Fog/Compute/AWS/Addresses">RubyDoc: Fog::Compute::AWS::Addresses</a></li>
+<li><a href="http://rubydoc.info/github/fog/fog/index">RubyDoc: Fog Alphabetic Index</a></li>
+<li><a href="https://github.com/fog/fog/blob/master/lib/fog/aws/requests/compute/associate_address.rb">GitHub: fog - associate_address.rb</a></li>
+<li><a href="http://opsrobot.com/post/9631423001/using-fog-for-attaching-aws-elastic-ip-addresses-to">Using fog for attaching AWS elastic ip addresses to servers</a></li>
+<li><a href="http://fog.io/">Fog home site</a></li>
+<li><a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AESDG-chapter-instancedata.html">AWS Documentation: Instance Metadata and User Data</a></li>
+<li><a href="https://github.com/madebymade/aws-remap-elastic-ip">AWS Elastic IP remapper</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+</feed>

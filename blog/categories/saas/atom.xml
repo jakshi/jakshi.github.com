@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: saas | DevOp's Blog]]></title>
+  <link href="http://jakshi.github.com/blog/categories/saas/atom.xml" rel="self"/>
+  <link href="http://jakshi.github.com/"/>
+  <updated>2015-03-18T19:51:54+08:00</updated>
+  <id>http://jakshi.github.com/</id>
+  <author>
+    <name><![CDATA[jakshi]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Using your favourite editor for remote pair programming]]></title>
+    <link href="http://jakshi.github.com/blog/2013/07/19/using-your-favourite-editor-for-remote-pair-programming/"/>
+    <updated>2013-07-19T20:19:00+08:00</updated>
+    <id>http://jakshi.github.com/blog/2013/07/19/using-your-favourite-editor-for-remote-pair-programming</id>
+    <content type="html"><![CDATA[<p>I Found an interesting service for pair programming: <a href="https://floobits.com/">Floodbits</a>.</p>
+
+<ul>
+<li>Emacs, VIM, sublime text supported with plugins.</li>
+<li>Private workspaces are paid.</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: git | DevOp's Blog]]></title>
+  <link href="http://jakshi.github.com/blog/categories/git/atom.xml" rel="self"/>
+  <link href="http://jakshi.github.com/"/>
+  <updated>2015-03-18T19:51:54+08:00</updated>
+  <id>http://jakshi.github.com/</id>
+  <author>
+    <name><![CDATA[jakshi]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Rewriting git commit]]></title>
+    <link href="http://jakshi.github.com/blog/2014/07/14/rewriting-git-commit/"/>
+    <updated>2014-07-14T00:13:00+08:00</updated>
+    <id>http://jakshi.github.com/blog/2014/07/14/rewriting-git-commit</id>
+    <content type="html"><![CDATA[<p>Sometimes when you commit something nasty, you need to rewrite it. Or you may need to split commit into parts. Or whatever.</p>
+
+<p>Use case: You want to remove some files that you added with your commit.</p>
+
+<!-- more -->
+
+
+<h1>Find the commit</h1>
+
+<p><code>
+git log --pretty=format:'%h %ad | %s%d [%an]' --graph --date=short
+</code></p>
+
+<p>Let it be <code>4ca80f0</code>.</p>
+
+<h1>Remove files that you don't want in the commit.</h1>
+
+<p><code>
+git rebase -i 4ca80f0~1
+</code></p>
+
+<p>Replace pick with edit and save file.</p>
+
+<p>Then you need to unstage files in the commit:</p>
+
+<p><code>
+git reset HEAD^
+</code></p>
+
+<p>now all files are in state before that commit, and you can add/remove/stage them.</p>
+
+<p>to undo <code>windows</code> file changes:</p>
+
+<p><code>
+git checkout -- windows
+</code></p>
+
+<p>or if this is a new file you can just delete it</p>
+
+<p><code>
+rm -rf windows
+</code></p>
+
+<p>also you can split this commit into several commits.</p>
+
+<h1>Change commit message</h1>
+
+<p>Now you probably want to change commit message:</p>
+
+<p><code>
+git commit --amend
+</code></p>
+
+<h1>Apply changes</h1>
+
+<p><code>
+git rebase --continue
+</code></p>
+
+<h1>Profit!</h1>
+
+<p>Enjoy you splitted/amended commit.</p>
+
+<h1>References</h1>
+
+<ul>
+<li><a href="http://stackoverflow.com/questions/11729030/how-do-i-selectively-revert-some-changes-in-a-single-commit-to-a-single-file">Stackoverflow: How do I selectively revert some changes in a single commit to a single file?</a></li>
+<li><a href="http://stackoverflow.com/questions/4795600/reverting-part-of-a-commit-with-git/4796144#4796144">Stackoverflow: Reverting part of a commit with git</a></li>
+<li><a href="http://stackoverflow.com/questions/1109069/git-selective-revert-local-changes-from-a-file">Stackoverflow: git selective revert local changes from a file</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[rewriting your email in git commits]]></title>
+    <link href="http://jakshi.github.com/blog/2014/01/25/rewriting-your-email-in-git-commits/"/>
+    <updated>2014-01-25T18:57:00+08:00</updated>
+    <id>http://jakshi.github.com/blog/2014/01/25/rewriting-your-email-in-git-commits</id>
+    <content type="html"><![CDATA[<p>Sometimes you need to rewrite your email in your commits in some git repository.
+Do it with command:</p>
+
+<pre><code>git filter-branch --env-filter 'if [ $GIT_AUTHOR_EMAIL = bad@email ]; then GIT_AUTHOR_EMAIL=correct@email; fi; export GIT_AUTHOR_EMAIL'
+</code></pre>
+
+<p>For your collaborators this operatioin might be dangerous. According to <a href="http://stackoverflow.com/users/46058/jakub-narebski">Jakub Narębski</a> collaborators will need to:</p>
+
+<ul>
+<li>if they didn't base their work on history pre-rewrite, just <code>git reset --hard origin/master</code> or just <code>git pull origin</code> (which should fast-forward).</li>
+<li>If they based their change, they have to rebase using <code>git rebase origin/master</code> or just <code>git pull --rebase origin</code></li>
+</ul>
+
+
+<p>More info:</p>
+
+<ul>
+<li><a href="http://stackoverflow.com/questions/3401732/rewrite-author-in-history">Stackoverflow: Rewrite author in history</a></li>
+<li><a href="http://git-scm.com/book/ch6-4.html">Pro Git Book: 6.4 Git Tools - Rewriting History</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+</feed>

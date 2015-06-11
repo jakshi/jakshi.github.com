@@ -180,6 +180,12 @@ knife exec -E 'nodes.transform ("chef_environment: &hellip;">
 </pre></td><td class='code'><pre><code class=''><span class='line'>knife search node "chef_environment:production AND recipes:web_server" -i</span></code></pre></td></tr></table></div></figure>
 
 
+<h1>Get list of all uniq non-system usernames that exists in specific environment</h1>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>knife exec -E 'users = []; nodes.find("chef_environment:production") {|n| n[:etc][:passwd].select { |user, options| options[:uid] &gt;= 1000 }.each { |user, options| users &lt;&lt; user} }; users.uniq.each { |user| puts user } '</span></code></pre></td></tr></table></div></figure>
+
+
 <h1>More shotcuts</h1>
 
 <p>Do you want even more shortcuts? Read nice article: <a href="http://dougireton.com/blog/2013/02/03/knife-tricks/">Knife Tricks</a></p>

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: technical | DevOp's Blog]]></title>
   <link href="http://jakshi.github.com/blog/categories/technical/atom.xml" rel="self"/>
   <link href="http://jakshi.github.com/"/>
-  <updated>2015-03-18T19:51:54+08:00</updated>
+  <updated>2015-06-11T14:21:33+08:00</updated>
   <id>http://jakshi.github.com/</id>
   <author>
     <name><![CDATA[jakshi]]></name>
@@ -89,6 +89,12 @@ knife ssh 'chef_environment:qa02' 'sudo chef-client'
 
 <p><code>
 knife search node "chef_environment:production AND recipes:web_server" -i
+</code></p>
+
+<h1>Get list of all uniq non-system usernames that exists in specific environment</h1>
+
+<p><code>
+knife exec -E 'users = []; nodes.find("chef_environment:production") {|n| n[:etc][:passwd].select { |user, options| options[:uid] &gt;= 1000 }.each { |user, options| users &lt;&lt; user} }; users.uniq.each { |user| puts user } '
 </code></p>
 
 <h1>More shotcuts</h1>

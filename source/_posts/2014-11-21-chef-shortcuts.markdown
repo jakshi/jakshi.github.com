@@ -82,6 +82,12 @@ And show only node names (-i option)
 knife search node "chef_environment:production AND recipes:web_server" -i
 ```
 
+# Get list of all uniq non-system usernames that exists in specific environment
+
+```
+knife exec -E 'users = []; nodes.find("chef_environment:production") {|n| n[:etc][:passwd].select { |user, options| options[:uid] >= 1000 }.each { |user, options| users << user} }; users.uniq.each { |user| puts user } '
+```
+
 # More shotcuts
 
 Do you want even more shortcuts? Read nice article: [Knife Tricks](http://dougireton.com/blog/2013/02/03/knife-tricks/)

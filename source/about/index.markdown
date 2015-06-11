@@ -11,7 +11,7 @@ footer: true
 
 * name: Konstantin Lysenko
 * occupation: DevOp
-* work in [Atalanta Systems](http://atalanta-systems.com/)
+* work in [Binary Group Services Sdn Bhd](https://www.binary.com/careers?l=EN)
 
 ## Contacts
  
